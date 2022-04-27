@@ -10,6 +10,9 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    if (Get.isDarkMode) {
+      controller.isDark.value = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Al Quran'),
@@ -23,17 +26,21 @@ class HomeView extends GetView<HomeController> {
       body: DefaultTabController(
         length: 3,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+            top: 20,
+            right: 20,
+            left: 20,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Assalamualaikum",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Obx(() => Text(
+                    "Assalamualaikum",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: controller.isDark.isTrue ? white : primaryDark),
+                  )),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20),
                 decoration: BoxDecoration(
@@ -116,9 +123,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               TabBar(
-                indicatorColor: primary,
-                labelColor: primaryDark,
-                unselectedLabelColor: Colors.grey,
                 tabs: [
                   Tab(
                     text: "Surah",
@@ -158,23 +162,81 @@ class HomeView extends GetView<HomeController> {
                                   Get.toNamed(Routes.DETAIL_SURAH,
                                       arguments: surah);
                                 },
-                                leading: CircleAvatar(
-                                  backgroundColor: primary,
-                                  child: Text("${surah.number}"),
-                                ),
+                                leading: Obx(() => Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: controller.isDark.isTrue
+                                              ? AssetImage(
+                                                  "assets/images/list-dark.png")
+                                              : AssetImage(
+                                                  "assets/images/list.png"),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "${surah.number}",
+                                        ),
+                                      ),
+                                    )),
                                 title: Text(
-                                    "${surah.name?.transliteration?.id ?? 'Error...'}"),
+                                  "${surah.name?.transliteration?.id ?? 'Error...'}",
+                                ),
                                 subtitle: Text(
-                                    "${surah.numberOfVerses} Ayat | ${surah.revelation?.id ?? 'Error...'}"),
-                                trailing: Text("${surah.name?.short}"),
+                                  "${surah.numberOfVerses} Ayat | ${surah.revelation?.id ?? 'Error...'}",
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                                trailing: Text(
+                                  "${surah.name?.short}",
+                                ),
                               );
                             },
                           );
                         },
                       ),
                     ),
-                    Center(
-                      child: Text("Page 2"),
+                    ListView.builder(
+                      itemCount: 30,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            onTap: () {
+                              //
+                            },
+                            leading: Obx(() => Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: controller.isDark.isTrue
+                                          ? AssetImage(
+                                              "assets/images/list-dark.png")
+                                          : AssetImage(
+                                              "assets/images/list.png"),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "${index + 1}",
+                                      style: TextStyle(
+                                          color: controller.isDark.isTrue
+                                              ? white
+                                              : primaryDark),
+                                    ),
+                                  ),
+                                )),
+                            title: Obx(
+                              () => Text(
+                                "Juz ${index + 1}",
+                                style: TextStyle(
+                                    color: controller.isDark.isTrue
+                                        ? white
+                                        : primaryDark),
+                              ),
+                            ));
+                      },
                     ),
                     Center(
                       child: Text("Page 3"),
@@ -185,6 +247,13 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.isDarkMode ? Get.changeTheme(light) : Get.changeTheme(dark);
+          controller.isDark.toggle();
+        },
+        child: Icon(Icons.color_lens),
       ),
     );
   }
