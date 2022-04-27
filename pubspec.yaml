@@ -2,24 +2,26 @@ name: alquran
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment:
-  sdk: ">=2.16.1 <3.0.0"
+environment: 
+  sdk: '>=2.16.1 <3.0.0'
 
-dependencies:
+dependencies: 
   cupertino_icons: ^1.0.2
   get: 4.6.1
   http: 0.13.4
   lottie: 1.3.0
-  flutter:
+  shared_preferences: 2.0.13
+  flutter: 
     sdk: flutter
 
-dev_dependencies:
+dev_dependencies: 
   flutter_lints: ^1.0.0
-  flutter_test:
+  flutter_test: 
     sdk: flutter
 
-flutter:
-  uses-material-design: true
-  assets:
+flutter: 
+  assets: 
     - assets/lotties/
     - assets/images/
+  uses-material-design: true
+

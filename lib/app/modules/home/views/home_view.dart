@@ -250,7 +250,8 @@ class HomeView extends GetView<HomeController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.isDarkMode ? Get.changeTheme(light) : Get.changeTheme(dark);
+          Get.changeThemeMode(
+              Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
           controller.isDark.toggle();
         },
         child: Icon(Icons.color_lens),
